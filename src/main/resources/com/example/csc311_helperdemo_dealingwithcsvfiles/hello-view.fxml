@@ -16,4 +16,5 @@
 
     <Button onAction="#onSaveButtonClick" text="Save!" />
 
+    <Button onAction="#onSavePDFButtonClick" text="Save PDF!" />
 </VBox>

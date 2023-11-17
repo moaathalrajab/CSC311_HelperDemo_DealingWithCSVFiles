@@ -4,7 +4,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
-
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfWriter;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +48,7 @@ public class HelloController {
     @FXML
     protected void onSaveButtonClick() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open CSV File");
+        fileChooser.setTitle("Save CSV File");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("CSV Files", "*.csv")
         );
@@ -91,6 +96,50 @@ public class HelloController {
     //ths method return the data to be written in a file
     public String[] getData(){
         return areaText.getText().split(",");
+    }
+
+
+    @FXML
+    protected void onSavePDFButtonClick() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save PDF File");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("PDF Files", "*.pdf")
+        );
+        File f = fileChooser.showSaveDialog(welcomeText.getScene().getWindow());
+
+        if (f != null) {
+            try {
+                writeToPDF(f.getAbsolutePath(), getData());
+            } catch (Exception e) {
+
+            }
+
+        }
+    }
+
+
+    private void writeToPDF(String file, String[] data) throws FileNotFoundException, DocumentException {
+
+        Document doc = new Document();
+        PdfWriter writer = PdfWriter.getInstance(doc, new FileOutputStream(file));
+
+        doc.open();
+        //adds paragraph to the PDF file
+        try {
+            doc.add(new Paragraph(Arrays.toString(data)));
+        } catch (DocumentException e) {
+            throw new RuntimeException(e);
+        }
+        //close the PDF file
+        doc.close();
+        //closes the writer
+        writer.close();
+        doc.addAuthor("Your name");
+        doc.addCreationDate();
+        doc.addCreator("CSC311 _ FSC");
+        doc.addTitle("DB Report");
+        doc.addSubject("Students Data");
     }
 
 }
