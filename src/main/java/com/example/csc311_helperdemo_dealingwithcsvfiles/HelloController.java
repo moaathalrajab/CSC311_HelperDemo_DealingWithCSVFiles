@@ -131,15 +131,16 @@ public class HelloController {
         } catch (DocumentException e) {
             throw new RuntimeException(e);
         }
-        //close the PDF file
-        doc.close();
-        //closes the writer
-        writer.close();
         doc.addAuthor("Your name");
         doc.addCreationDate();
         doc.addCreator("CSC311 _ FSC");
         doc.addTitle("DB Report");
         doc.addSubject("Students Data");
+        //close the PDF file
+        doc.close();
+        //closes the writer
+        writer.close();
+
     }
 
 }
